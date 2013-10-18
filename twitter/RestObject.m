@@ -7,7 +7,6 @@
 //
 
 #import "RestObject.h"
-#import "JSONKit.h"
 
 @implementation RestObject
 
@@ -25,10 +24,6 @@
 
 - (id)valueOrNilForKeyPath:(NSString *)keyPath {
     return [_data valueOrNilForKeyPath:keyPath];
-}
-
-- (NSString *)JSONString {
-    return [_data JSONString];
 }
 
 - (void)forwardInvocation:(NSInvocation *)anInvocation

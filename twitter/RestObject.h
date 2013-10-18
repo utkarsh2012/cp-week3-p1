@@ -20,6 +20,5 @@
 
 - (id)objectForKey:(id)key;
 - (id)valueOrNilForKeyPath:(NSString *)keyPath;
-- (NSString *)JSONString;
 
 @end

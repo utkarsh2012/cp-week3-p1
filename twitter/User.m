@@ -8,7 +8,6 @@
 
 #import "User.h"
 #import "TwitterClient.h"
-#import "JSONKit.h"
 
 NSString * const UserDidLoginNotification = @"UserDidLoginNotification";
 NSString * const UserDidLogoutNotification = @"UserDidLogoutNotification";
@@ -20,9 +19,10 @@ static User *_currentUser;
 
 + (User *)currentUser {
     if (!_currentUser) {
-        NSString *jsonString = [[NSUserDefaults standardUserDefaults] stringForKey:kCurrentUserKey];
-        if (jsonString) {
-            _currentUser = [[User alloc] initWithDictionary:[jsonString objectFromJSONString]];
+        NSData *userData = [[NSUserDefaults standardUserDefaults] dataForKey:kCurrentUserKey];
+        if (userData) {
+            NSDictionary *userDictionary = [NSJSONSerialization JSONObjectWithData:userData options:NSJSONReadingMutableContainers error:nil];
+            _currentUser = [[User alloc] initWithDictionary:userDictionary];
         }
     }
     
@@ -31,7 +31,8 @@ static User *_currentUser;
 
 + (void)setCurrentUser:(User *)currentUser {
     if (currentUser) {
-        [[NSUserDefaults standardUserDefaults] setObject:[currentUser JSONString] forKey:kCurrentUserKey];
+        NSData *userData = [NSJSONSerialization dataWithJSONObject:currentUser.data options:NSJSONWritingPrettyPrinted error:nil];
+        [[NSUserDefaults standardUserDefaults] setObject:userData forKey:kCurrentUserKey];
     } else {
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:kCurrentUserKey];
         [TwitterClient instance].accessToken = nil;
