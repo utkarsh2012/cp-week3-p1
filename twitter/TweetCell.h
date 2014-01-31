@@ -9,5 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface TweetCell : UITableViewCell
-
+@property (nonatomic, weak) IBOutlet UILabel *tweetText;
+@property (nonatomic, weak) IBOutlet UILabel *name;
+@property (nonatomic, weak) IBOutlet UILabel *screenName;
+@property (nonatomic, weak) IBOutlet UIImageView *displayImageUrl;
 @end

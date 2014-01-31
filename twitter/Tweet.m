@@ -14,6 +14,21 @@
     return [self.data valueOrNilForKeyPath:@"text"];
 }
 
+- (NSString *)profile_image_url {
+    NSDictionary *user = [self.data valueOrNilForKeyPath:@"user"];
+    return [user valueOrNilForKeyPath:@"profile_image_url"];
+}
+
+- (NSString *)name {
+    NSDictionary *user = [self.data valueOrNilForKeyPath:@"user"];
+    return [user valueOrNilForKeyPath:@"name"];
+}
+
+- (NSString *)screen_name {
+    NSDictionary *user = [self.data valueOrNilForKeyPath:@"user"];
+    return [user valueOrNilForKeyPath:@"screen_name"];
+}
+
 + (NSMutableArray *)tweetsWithArray:(NSArray *)array {
     NSMutableArray *tweets = [[NSMutableArray alloc] initWithCapacity:array.count];
     for (NSDictionary *params in array) {

@@ -7,6 +7,8 @@
 //
 
 #import "TimelineVC.h"
+#import "TweetCell.h"
+#import "UIImageView+AFNetworking.h"
 
 @interface TimelineVC ()
 
@@ -34,7 +36,11 @@
 {
     [super viewDidLoad];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Sign Out" style:UIBarButtonItemStylePlain target:self action:@selector(onSignOutButton)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Sign Out" style:UIBarButtonItemStylePlain target:self action:@selector(onSignOutButton)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"New" style:UIBarButtonItemStylePlain target:self action:@selector(onNewTweetButton)];
+    
+    UINib *tweetNib = [UINib nibWithNibName:@"TweetCell" bundle:nil];
+    [self.tableView registerNib:tweetNib forCellReuseIdentifier:@"TweetCell"];
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -63,14 +69,23 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
-
+    static NSString *CellIdentifier = @"TweetCell";
+    TweetCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     Tweet *tweet = self.tweets[indexPath.row];
-    cell.textLabel.text = tweet.text;
+    cell.tweetText.text = tweet.text;
+    
+    NSURL *url = [[NSURL alloc] initWithString:tweet.profile_image_url];
+    [cell.displayImageUrl setImageWithURL:url placeholderImage:[UIImage imageNamed:@"placeholder"]];
+    
+    cell.screenName.text = tweet.screen_name;
+    cell.name.text = tweet.name;
     
     return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 80;
 }
 
 /*
@@ -131,6 +146,10 @@
  */
 
 #pragma mark - Private methods
+
+- (void)onNewTweetButton {
+    
+}
 
 - (void)onSignOutButton {
     [User setCurrentUser:nil];
