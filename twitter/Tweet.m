@@ -26,7 +26,7 @@
 
 - (NSString *)screen_name {
     NSDictionary *user = [self.data valueOrNilForKeyPath:@"user"];
-    return [user valueOrNilForKeyPath:@"screen_name"];
+    return [@"@" stringByAppendingString: [user valueOrNilForKeyPath:@"screen_name"] ];
 }
 
 + (NSMutableArray *)tweetsWithArray:(NSArray *)array {

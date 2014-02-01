@@ -8,6 +8,8 @@
 
 #import "TimelineVC.h"
 #import "TweetCell.h"
+#import "TweetVC.h"
+#import "ComposeVC.h"
 #import "UIImageView+AFNetworking.h"
 
 @interface TimelineVC ()
@@ -131,6 +133,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    TweetVC *tweetViewControler = [[TweetVC alloc] init];
+    tweetViewControler.tweet = self.tweets[indexPath.row];
+    [self.navigationController pushViewController:tweetViewControler animated:YES];
 }
 
 /*
@@ -148,7 +153,9 @@
 #pragma mark - Private methods
 
 - (void)onNewTweetButton {
-    
+    ComposeVC *composeView = [[ComposeVC alloc] init];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:composeView];
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (void)onSignOutButton {
