@@ -184,11 +184,20 @@
 
  */
 
+
+-(void)sendDataToTimeline:(Tweet *)publishTweet
+{
+    [self.tweets addObject:publishTweet];
+    [self.tableView reloadData];
+}
+
+
 #pragma mark - Private methods
 
 - (void)onNewTweetButton {
     ComposeVC *composeView = [[ComposeVC alloc] init];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:composeView];
+    composeView.delegate=self;
     composeView.user = [User currentUser];
     [self presentViewController:navigationController animated:YES completion:nil];
 }

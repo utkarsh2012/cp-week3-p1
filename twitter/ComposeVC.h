@@ -17,4 +17,12 @@
 @property (nonatomic, weak) IBOutlet UILabel *name;
 @property (nonatomic, weak) IBOutlet UILabel *screenName;
 @property (nonatomic, weak) IBOutlet UIImageView *displayImage;
+
+@property(nonatomic,assign)id delegate;
+@end
+
+@protocol senddataProtocol <NSObject>
+
+-(void)sendDataToTimeline:(Tweet *)publishTweet;
+
 @end

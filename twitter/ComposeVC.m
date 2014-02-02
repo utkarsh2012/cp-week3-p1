@@ -8,9 +8,10 @@
 
 #import "ComposeVC.h"
 #import "UIImageView+AFNetworking.h"
+#import "Tweet.h"
 
 @interface ComposeVC ()
-
+@property (nonatomic, strong) Tweet *publishTweet;
 @end
 
 @implementation ComposeVC
@@ -43,6 +44,11 @@
     // Do any additional setup after loading the view from its nib.
 }
 
+@synthesize delegate;
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [delegate sendDataToTimeline:self.publishTweet];
+}
 
 - (void)didReceiveMemoryWarning
 {
@@ -54,6 +60,7 @@
     NSInteger in_reply_to_status_id = [self.tweet objectForKey:@"id"];
     [[TwitterClient instance] postTweet:self.text.text in_reply_to_status_id:in_reply_to_status_id success:^(AFHTTPRequestOperation *operation, id response) {
         NSLog(@"%@", response);
+        self.publishTweet = [[Tweet alloc] initWithDictionary:response];
         [self dismissViewControllerAnimated:YES completion:nil];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         // Do nothing
@@ -64,4 +71,5 @@
 - (void)onCancelButton {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
 @end
