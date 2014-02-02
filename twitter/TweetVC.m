@@ -8,6 +8,7 @@
 
 #import "TweetVC.h"
 #import "ComposeVC.h"
+#import "Tweet.h"
 #import "UIImageView+AFNetworking.h"
 
 @interface TweetVC ()
@@ -31,6 +32,8 @@
     self.text.text = self.tweet.text;
     self.name.text = self.tweet.name;
     self.screen_name.text = self.tweet.screen_name;
+    self.total_retweets.text = self.tweet.total_retweets;
+    self.total_favorites.text = self.tweet.total_favorites;
     
     NSURL *url = [[NSURL alloc] initWithString:self.tweet.profile_image_url];
     [self.profile_image_url setImageWithURL:url placeholderImage:[UIImage imageNamed:@"placeholder"]];
@@ -46,6 +49,8 @@
 
 - (void)onReplyButton {
     ComposeVC *composeView = [[ComposeVC alloc] init];
+    composeView.user = [User currentUser];
+    composeView.tweet = self.tweet;
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:composeView];
     [self presentViewController:navigationController animated:YES completion:nil];
 }

@@ -16,5 +16,6 @@
 @property (nonatomic, weak) IBOutlet UIImageView *profile_image_url;
 @property (nonatomic, weak) IBOutlet UILabel *name;
 @property (nonatomic, weak) IBOutlet UILabel *screen_name;
-
+@property (nonatomic, weak) IBOutlet UILabel *total_retweets;
+@property (nonatomic, weak) IBOutlet UILabel *total_favorites;
 @end

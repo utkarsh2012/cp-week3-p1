@@ -7,6 +7,7 @@
 //
 
 #import "ComposeVC.h"
+#import "UIImageView+AFNetworking.h"
 
 @interface ComposeVC ()
 
@@ -26,10 +27,22 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.name.text = [self.user objectForKey:@"name"];
+    self.screenName.text = [self.user objectForKey:@"screen_name"];
+    
+    if (self.tweet) {
+        self.text.text = self.tweet.screen_name;
+    }
+    
+    NSURL *url = [[NSURL alloc] initWithString:[self.user objectForKey:@"profile_image_url"]];
+    [self.displayImage setImageWithURL:url placeholderImage:[UIImage imageNamed:@"placeholder"]];
+    
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(onCancelButton)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Tweet" style:UIBarButtonItemStylePlain target:self action:@selector(onTweetButton)];
+    [self.text performSelector:@selector(becomeFirstResponder) withObject:nil afterDelay:0];
     // Do any additional setup after loading the view from its nib.
 }
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -38,7 +51,14 @@
 }
 
 - (void)onTweetButton {
-    
+    NSInteger in_reply_to_status_id = [self.tweet objectForKey:@"id"];
+    [[TwitterClient instance] postTweet:self.text.text in_reply_to_status_id:in_reply_to_status_id success:^(AFHTTPRequestOperation *operation, id response) {
+        NSLog(@"%@", response);
+        [self dismissViewControllerAnimated:YES completion:nil];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        // Do nothing
+        NSLog(@"%@", error);
+    }];
 }
 
 - (void)onCancelButton {

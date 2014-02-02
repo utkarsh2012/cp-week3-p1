@@ -29,6 +29,14 @@
     return [@"@" stringByAppendingString: [user valueOrNilForKeyPath:@"screen_name"] ];
 }
 
+- (NSString *)total_retweets {
+    return [(NSNumber*)[self.data valueOrNilForKeyPath:@"rewteet_count"] stringValue];
+}
+
+- (NSString *)total_favorites {
+    return [(NSNumber*)[self.data valueOrNilForKeyPath:@"favorite_count"] stringValue];
+}
+
 + (NSMutableArray *)tweetsWithArray:(NSArray *)array {
     NSMutableArray *tweets = [[NSMutableArray alloc] initWithCapacity:array.count];
     for (NSDictionary *params in array) {

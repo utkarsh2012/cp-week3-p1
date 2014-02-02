@@ -44,12 +44,30 @@
     UINib *tweetNib = [UINib nibWithNibName:@"TweetCell" bundle:nil];
     [self.tableView registerNib:tweetNib forCellReuseIdentifier:@"TweetCell"];
 
+    UIRefreshControl *refresh = [[UIRefreshControl alloc] init];
+    refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Refresh"];
+    [refresh addTarget:self action:@selector(pullTweets) forControlEvents:UIControlEventValueChanged];
+    self.refreshControl = refresh;
+
+    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
+
+- (void)stopRefresh
+{
+    [self.refreshControl endRefreshing];
+}
+
+- (void)pullTweets
+{
+    [self reload];
+    [self performSelector:@selector(stopRefresh) withObject:nil afterDelay:2];
+}
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -89,6 +107,22 @@
 {
     return 80;
 }
+
+//-(void)scrollViewDidScroll:(UIScrollView *)scrollView_
+//{
+//    
+//    CGFloat currentOffsetX = scrollView_.contentOffset.x;
+//    CGFloat currentOffSetY = scrollView_.contentOffset.y;
+//    CGFloat contentHeight = scrollView_.contentSize.height;
+//    
+//    if (currentOffSetY < (contentHeight / 8.0)) {
+//        scrollView_.contentOffset = CGPointMake(currentOffsetX,(currentOffSetY + (contentHeight/2)));
+//    }
+//    if (currentOffSetY > ((contentHeight * 6)/ 8.0)) {
+//        scrollView_.contentOffset = CGPointMake(currentOffsetX,(currentOffSetY - (contentHeight/2)));
+//    } 
+//}
+
 
 /*
 // Override to support conditional editing of the table view.
@@ -155,6 +189,7 @@
 - (void)onNewTweetButton {
     ComposeVC *composeView = [[ComposeVC alloc] init];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:composeView];
+    composeView.user = [User currentUser];
     [self presentViewController:navigationController animated:YES completion:nil];
 }
 

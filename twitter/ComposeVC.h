@@ -7,7 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "User.h"
+#import "Tweet.h"
 
 @interface ComposeVC : UIViewController
-
+@property (nonatomic, weak) User *user;
+@property (nonatomic, weak) Tweet *tweet;
+@property (nonatomic, weak) IBOutlet UITextView *text;
+@property (nonatomic, weak) IBOutlet UILabel *name;
+@property (nonatomic, weak) IBOutlet UILabel *screenName;
+@property (nonatomic, weak) IBOutlet UIImageView *displayImage;
 @end
