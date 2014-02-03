@@ -93,6 +93,7 @@
     TweetCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     Tweet *tweet = self.tweets[indexPath.row];
     cell.tweetText.text = tweet.text;
+    [cell.tweetText sizeToFit];
     
     NSURL *url = [[NSURL alloc] initWithString:tweet.profile_image_url];
     [cell.displayImageUrl setImageWithURL:url placeholderImage:[UIImage imageNamed:@"placeholder"]];

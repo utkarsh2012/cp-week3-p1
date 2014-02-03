@@ -18,4 +18,9 @@
 @property (nonatomic, weak) IBOutlet UILabel *screen_name;
 @property (nonatomic, weak) IBOutlet UILabel *total_retweets;
 @property (nonatomic, weak) IBOutlet UILabel *total_favorites;
+
+- (IBAction)favoriteAction:(id)sender;
+- (IBAction)replyAction:(id)sender;
+- (IBAction)retweetAction:(id)sender;
+
 @end

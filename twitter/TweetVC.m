@@ -30,6 +30,7 @@
 {
     [super viewDidLoad];
     self.text.text = self.tweet.text;
+    [self.text sizeToFit];
     self.name.text = self.tweet.name;
     self.screen_name.text = self.tweet.screen_name;
     self.total_retweets.text = self.tweet.total_retweets;
@@ -53,6 +54,35 @@
     composeView.tweet = self.tweet;
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:composeView];
     [self presentViewController:navigationController animated:YES completion:nil];
+}
+
+- (IBAction)favoriteAction:(id)sender {
+    UIButton *favoriteButton = (UIButton *)sender;
+    favoriteButton.selected = !favoriteButton.selected;
+    
+    if (favoriteButton.selected) {
+        //selected
+        
+    } else {
+        // unselected
+    }
+}
+
+- (IBAction)retweetAction:(id)sender {
+    UIButton *retweetButton = (UIButton *)sender;
+    retweetButton.selected = !retweetButton.selected;
+    
+    if (retweetButton.selected) {
+        //selected
+        
+    } else {
+        // unselected
+    }
+}
+
+
+- (IBAction)replyAction:(id)sender {
+    [self onReplyButton];
 }
 
 @end
