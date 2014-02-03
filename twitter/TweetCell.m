@@ -26,4 +26,34 @@
     // Configure the view for the selected state
 }
 
+- (IBAction)favoriteAction:(id)sender {
+    UIButton *favoriteButton = (UIButton *)sender;
+    favoriteButton.selected = !favoriteButton.selected;
+    
+    if (favoriteButton.selected) {
+        //selected
+        
+    } else {
+        // unselected
+    }
+}
+
+- (IBAction)retweetAction:(id)sender {
+    UIButton *retweetButton = (UIButton *)sender;
+    retweetButton.selected = !retweetButton.selected;
+    
+    if (retweetButton.selected) {
+        //selected
+        
+    } else {
+        // unselected
+    }
+}
+
+
+- (IBAction)replyAction:(id)sender {
+    //UIButton *replyButton = (UIButton *)sender;
+}
+
+
 @end

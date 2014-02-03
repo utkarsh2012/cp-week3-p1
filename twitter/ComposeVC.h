@@ -10,7 +10,7 @@
 #import "User.h"
 #import "Tweet.h"
 
-@interface ComposeVC : UIViewController
+@interface ComposeVC : UIViewController <UITextViewDelegate>
 @property (nonatomic, weak) User *user;
 @property (nonatomic, weak) Tweet *tweet;
 @property (nonatomic, weak) IBOutlet UITextView *text;
@@ -21,8 +21,10 @@
 @property(nonatomic,assign)id delegate;
 @end
 
+//ComposeVCDelegate
 @protocol senddataProtocol <NSObject>
 
+//didComposeTweet
 -(void)sendDataToTimeline:(Tweet *)publishTweet;
 
 @end

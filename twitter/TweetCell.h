@@ -13,4 +13,10 @@
 @property (nonatomic, weak) IBOutlet UILabel *name;
 @property (nonatomic, weak) IBOutlet UILabel *screenName;
 @property (nonatomic, weak) IBOutlet UIImageView *displayImageUrl;
+
+
+- (IBAction)favoriteAction:(id)sender;
+- (IBAction)replyAction:(id)sender;
+- (IBAction)retweetAction:(id)sender;
+
 @end

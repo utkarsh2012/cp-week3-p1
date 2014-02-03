@@ -105,7 +105,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 80;
+    return 120;
 }
 
 //-(void)scrollViewDidScroll:(UIScrollView *)scrollView_
@@ -187,7 +187,7 @@
 
 -(void)sendDataToTimeline:(Tweet *)publishTweet
 {
-    [self.tweets addObject:publishTweet];
+    [self.tweets insertObject:publishTweet atIndex:0];
     [self.tableView reloadData];
 }
 

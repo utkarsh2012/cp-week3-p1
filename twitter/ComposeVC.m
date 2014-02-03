@@ -44,11 +44,6 @@
     // Do any additional setup after loading the view from its nib.
 }
 
-@synthesize delegate;
--(void)viewWillDisappear:(BOOL)animated
-{
-    [delegate sendDataToTimeline:self.publishTweet];
-}
 
 - (void)didReceiveMemoryWarning
 {
@@ -57,11 +52,13 @@
 }
 
 - (void)onTweetButton {
-    NSInteger in_reply_to_status_id = [self.tweet objectForKey:@"id"];
+    NSInteger in_reply_to_status_id = [[self.tweet objectForKey:@"id"] integerValue];  //create ID in tweet
     [[TwitterClient instance] postTweet:self.text.text in_reply_to_status_id:in_reply_to_status_id success:^(AFHTTPRequestOperation *operation, id response) {
         NSLog(@"%@", response);
         self.publishTweet = [[Tweet alloc] initWithDictionary:response];
-        [self dismissViewControllerAnimated:YES completion:nil];
+        [self dismissViewControllerAnimated:YES completion:^{
+            [self.delegate sendDataToTimeline:self.publishTweet];
+        }];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         // Do nothing
         NSLog(@"%@", error);
@@ -70,6 +67,12 @@
 
 - (void)onCancelButton {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+
+- (void)textViewDidChange:(UITextView *)textView {
+    NSLog(@"%d", [textView.text length]);
+    //self.countLabel = [NSString stringWithFormat:@"%d", ]
 }
 
 @end

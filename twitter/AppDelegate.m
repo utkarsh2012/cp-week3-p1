@@ -32,6 +32,9 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateRootVC) name:UserDidLoginNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateRootVC) name:UserDidLogoutNotification object:nil];
     
+    //[[UINavigationBar appearance] setBarTintColor:[UIColor blueColor]];
+    //[[UIBarButtonItem appearance] set]
+    
 /*
     self.window.rootViewController = [[TimelineVC alloc] init];
     

@@ -30,11 +30,11 @@
 }
 
 - (NSString *)total_retweets {
-    return [(NSNumber*)[self.data valueOrNilForKeyPath:@"rewteet_count"] stringValue];
+    return [[self.data valueOrNilForKeyPath:@"retweet_count"] stringValue];
 }
 
 - (NSString *)total_favorites {
-    return [(NSNumber*)[self.data valueOrNilForKeyPath:@"favorite_count"] stringValue];
+    return [[self.data valueOrNilForKeyPath:@"favorite_count"] stringValue];
 }
 
 + (NSMutableArray *)tweetsWithArray:(NSArray *)array {
