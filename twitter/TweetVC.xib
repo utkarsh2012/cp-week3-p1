@@ -7,8 +7,10 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TweetVC">
             <connections>
+                <outlet property="favoriteButton" destination="cft-So-mkv" id="MuB-Lx-TNQ"/>
                 <outlet property="name" destination="8ZH-kq-KkN" id="iej-zz-Esb"/>
                 <outlet property="profile_image_url" destination="IYb-9r-WoW" id="DUv-gg-a6K"/>
+                <outlet property="retweetButton" destination="VBa-Vu-TCh" id="h62-PY-dS4"/>
                 <outlet property="screen_name" destination="d9k-Cp-kIb" id="XFn-ge-pc2"/>
                 <outlet property="text" destination="W1Q-5T-b7S" id="j3A-yk-JLt"/>
                 <outlet property="total_favorites" destination="Bee-5s-ZN2" id="Dvm-vL-ohs"/>

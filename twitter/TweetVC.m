@@ -42,6 +42,13 @@
     self.total_retweets.text = self.tweet.total_retweets;
     self.total_favorites.text = self.tweet.total_favorites;
     
+    if (self.tweet.favorited) {
+        [self.favoriteButton setSelected:YES];
+    }
+    if (self.tweet.retweeted) {
+        [self.retweetButton setSelected:YES];
+    }
+    
     NSURL *url = [[NSURL alloc] initWithString:self.tweet.profile_image_url];
     [self.profile_image_url setImageWithURL:url placeholderImage:[UIImage imageNamed:@"placeholder"]];
     

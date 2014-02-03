@@ -55,7 +55,7 @@ static NSString * const kAccessTokenKey = @"kAccessTokenKey";
 #pragma mark - Statuses API
 
 - (void)homeTimelineWithCount:(int)count sinceId:(int)sinceId maxId:(int)maxId success:(void (^)(AFHTTPRequestOperation *operation, id response))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"count": @(count)}];
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"count": @(count), @"include_my_retweet" : @"true"}];
     if (sinceId > 0) {
         [params setObject:@(sinceId) forKey:@"since_id"];
     }
@@ -76,17 +76,27 @@ static NSString * const kAccessTokenKey = @"kAccessTokenKey";
 }
 
 
-- (void)postRetweet:(NSString*)tweet_id  success:(void (^)(AFHTTPRequestOperation *operation, id response))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
-        NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"id": tweet_id}];
-        
-        [self postPath:@"1.1/statuses/update.json" parameters:params success:success failure:failure];
+- (void)postRetweet:(NSString *)tweet_id  undo:(BOOL)undoRetweet success:(void (^)(AFHTTPRequestOperation *operation, id response))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
+    NSString *retweetUrl = @"";
+    if (undoRetweet==YES) {
+        retweetUrl = [NSString stringWithFormat:@"%@%@%@", @"1.1/statuses/destroy/", tweet_id, @".json"];
+    } else {
+        retweetUrl = [NSString stringWithFormat:@"%@%@%@", @"1.1/statuses/retweet/", tweet_id, @".json"];
+    }
+    
+    [self postPath:retweetUrl parameters:nil success:success failure:failure];
 }
 
-- (void)postFavorite:(NSString*)tweet_id success:(void (^)(AFHTTPRequestOperation *operation, id response))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
+- (void)postFavorite:(NSString *)tweet_id undo:(BOOL)undoFav success:(void (^)(AFHTTPRequestOperation *operation, id response))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"id": tweet_id}];
     
-    [self postPath:@"1.1/statuses/update.json" parameters:params success:success failure:failure];
+    if (undoFav==YES) {
+        [self postPath:@"1.1/favorites/destroy.json" parameters:params success:success failure:failure];
+    } else {
+        [self postPath:@"1.1/favorites/create.json" parameters:params success:success failure:failure];
+    }
 }
+
 
 #pragma mark - Private methods
 

@@ -23,4 +23,7 @@
 - (IBAction)replyAction:(id)sender;
 - (IBAction)retweetAction:(id)sender;
 
+@property (nonatomic, weak) IBOutlet UIButton *retweetButton;
+@property (nonatomic, weak) IBOutlet UIButton *favoriteButton;
+
 @end

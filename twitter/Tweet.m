@@ -37,6 +37,26 @@
     return [[self.data valueOrNilForKeyPath:@"favorite_count"] stringValue];
 }
 
+- (BOOL)favorited {
+    NSInteger favoritedVal = [[self.data valueOrNilForKeyPath:@"favorited"] intValue];
+    if (favoritedVal==1) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
+- (BOOL)retweeted {
+    NSInteger retweetedVal = [[self.data valueOrNilForKeyPath:@"retweeted"] intValue];
+    if (retweetedVal==1) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
+//favorited and retweeted
+
 + (NSMutableArray *)tweetsWithArray:(NSArray *)array {
     NSMutableArray *tweets = [[NSMutableArray alloc] initWithCapacity:array.count];
     for (NSDictionary *params in array) {

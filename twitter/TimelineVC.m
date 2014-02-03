@@ -17,7 +17,7 @@
 @property (nonatomic, strong) NSMutableArray *tweets;
 
 - (void)onSignOutButton;
-- (void)reload;
+- (void)reload:(NSInteger)sinceId;
 
 @end
 
@@ -27,7 +27,7 @@
 {
     self = [super initWithStyle:style];
     if (self) {
-        [self reload];
+        [self reload:0];
     }
     return self;
 }
@@ -68,7 +68,7 @@
 
 - (void)pullTweets
 {
-    [self reload];
+    [self reload:0];
     [self performSelector:@selector(stopRefresh) withObject:nil afterDelay:2];
 }
 
@@ -108,6 +108,19 @@
     cell.replyButton.tag = indexPath.row;
     [cell.replyButton addTarget:self action:@selector(onReplyButton:) forControlEvents:UIControlEventTouchUpInside];
     
+    cell.retweetButton.tag = indexPath.row;
+    [cell.retweetButton addTarget:self action:@selector(retweetAction:) forControlEvents:UIControlEventTouchUpInside];
+    
+    cell.favoriteButton.tag = indexPath.row;
+    [cell.favoriteButton addTarget:self action:@selector(favoriteAction:) forControlEvents:UIControlEventTouchUpInside];
+    
+    if (tweet.favorited) {
+        [cell.favoriteButton setSelected:YES];
+    }
+    if (tweet.retweeted) {
+        [cell.retweetButton setSelected:YES];
+    }
+    
     return cell;
 }
 
@@ -116,20 +129,16 @@
     return 120;
 }
 
-//-(void)scrollViewDidScroll:(UIScrollView *)scrollView_
-//{
-//    
-//    CGFloat currentOffsetX = scrollView_.contentOffset.x;
-//    CGFloat currentOffSetY = scrollView_.contentOffset.y;
-//    CGFloat contentHeight = scrollView_.contentSize.height;
-//    
-//    if (currentOffSetY < (contentHeight / 8.0)) {
-//        scrollView_.contentOffset = CGPointMake(currentOffsetX,(currentOffSetY + (contentHeight/2)));
-//    }
-//    if (currentOffSetY > ((contentHeight * 6)/ 8.0)) {
-//        scrollView_.contentOffset = CGPointMake(currentOffsetX,(currentOffSetY - (contentHeight/2)));
-//    } 
-//}
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView_
+{
+    CGFloat actualPosition = scrollView_.contentOffset.y;
+    CGFloat contentHeight = 20 * 90;
+    if (actualPosition >= contentHeight) {
+        Tweet *lastTweet = [self.tweets lastObject];
+        NSInteger tweetId = [[lastTweet objectForKey:@"id"] integerValue];
+        [self reload:tweetId];
+    }
+}
 
 
 /*
@@ -218,17 +227,76 @@
     [self presentViewController:navigationController animated:YES completion:nil];
 }
 
+- (void)favoriteAction:(UIButton*)sender {
+    sender.selected = !sender.selected;
+    Tweet *tweet = [self.tweets objectAtIndex:sender.tag];
+    NSString *tweetId = [tweet objectForKey:@"id_str"];
+    if (sender.selected) {
+        //Destroy fav
+        [self favorite:tweetId undoFavorite:YES];
+        [sender setSelected:NO];
+        
+    } else {
+        //Create fav
+        [self favorite:tweetId undoFavorite:NO];
+        [sender setSelected:YES];
+    }
+}
+
+- (void)retweetAction:(UIButton*)sender {
+    sender.selected = !sender.selected;
+    Tweet *tweet = [self.tweets objectAtIndex:sender.tag];
+    NSString *tweetId = [tweet objectForKey:@"id_str"];
+    if (sender.selected) {
+        //destroy retweet
+        NSDictionary *current_user_retweet = [tweet objectForKey:@"current_user_retweet"];
+        NSString *tweetId = [current_user_retweet objectForKey:@"id_str"];
+        [self retweet:tweetId undoRetweet:YES];
+        [sender setSelected:NO];
+    } else {
+        //create retweet
+        [self retweet:tweetId undoRetweet:NO];
+        [sender setSelected:YES];
+    }
+}
+
 - (void)onSignOutButton {
     [User setCurrentUser:nil];
 }
 
-- (void)reload {
-    [[TwitterClient instance] homeTimelineWithCount:20 sinceId:0 maxId:0 success:^(AFHTTPRequestOperation *operation, id response) {
+- (void)reload:(NSInteger)sinceId {
+    [[TwitterClient instance] homeTimelineWithCount:20 sinceId:sinceId maxId:0 success:^(AFHTTPRequestOperation *operation, id response) {
         NSLog(@"%@", response);
-        self.tweets = [Tweet tweetsWithArray:response];
+        if (sinceId>0) {
+            [self.tweets addObjectsFromArray:[Tweet tweetsWithArray:response]];
+        } else {
+            self.tweets = [Tweet tweetsWithArray:response];
+        }
         [self.tableView reloadData];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         // Do nothing
+        NSLog(@"%@", error);
+    }];
+}
+
+
+- (void)retweet:(NSString *)tweetId undoRetweet:(BOOL)undoRetweet {
+    [[TwitterClient instance] postRetweet:tweetId undo:undoRetweet success:^(AFHTTPRequestOperation *operation, id response) {
+        NSLog(@"%@", response);
+        [self.tableView reloadData];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        // Do nothing
+        NSLog(@"%@", error);
+    }];
+}
+
+- (void)favorite:(NSString *)tweetId undoFavorite:(BOOL)undoFavorite {
+    [[TwitterClient instance] postFavorite:tweetId undo:undoFavorite success:^(AFHTTPRequestOperation *operation, id response) {
+        NSLog(@"%@", response);
+        [self.tableView reloadData];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        // Do nothing
+        NSLog(@"%@", error);
     }];
 }
 

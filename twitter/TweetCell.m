@@ -7,6 +7,8 @@
 //
 
 #import "TweetCell.h"
+#import "TwitterClient.h"
+#import "UIImageView+AFNetworking.h"
 
 @implementation TweetCell
 
@@ -31,10 +33,10 @@
     favoriteButton.selected = !favoriteButton.selected;
     
     if (favoriteButton.selected) {
-        //selected
+        //Create fav
         
     } else {
-        // unselected
+        //Destroy fav
     }
 }
 
@@ -43,10 +45,10 @@
     retweetButton.selected = !retweetButton.selected;
     
     if (retweetButton.selected) {
-        //selected
+        //create retweet
         
     } else {
-        // unselected
+        //destroy retweet
     }
 }
 
