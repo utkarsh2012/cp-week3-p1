@@ -27,8 +27,6 @@
 {
     self = [super initWithStyle:style];
     if (self) {
-        self.title = @"Twitter";
-        
         [self reload];
     }
     return self;
@@ -37,9 +35,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    NSMutableDictionary *titleBarAttributes = [NSMutableDictionary dictionaryWithDictionary: [[UINavigationBar appearance] titleTextAttributes]];
+    [titleBarAttributes setValue:[UIColor whiteColor] forKey:UITextAttributeTextColor];
+    [[UINavigationBar appearance] setTitleTextAttributes:titleBarAttributes];
     
+    self.navigationItem.title = @"Home";
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Sign Out" style:UIBarButtonItemStylePlain target:self action:@selector(onSignOutButton)];
+    [self.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"New" style:UIBarButtonItemStylePlain target:self action:@selector(onNewTweetButton)];
+    [self.navigationItem.rightBarButtonItem setTintColor:[UIColor whiteColor]];
     
     UINib *tweetNib = [UINib nibWithNibName:@"TweetCell" bundle:nil];
     [self.tableView registerNib:tweetNib forCellReuseIdentifier:@"TweetCell"];
@@ -100,6 +104,9 @@
     
     cell.screenName.text = tweet.screen_name;
     cell.name.text = tweet.name;
+    
+    cell.replyButton.tag = indexPath.row;
+    [cell.replyButton addTarget:self action:@selector(onReplyButton:) forControlEvents:UIControlEventTouchUpInside];
     
     return cell;
 }
@@ -200,6 +207,14 @@
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:composeView];
     composeView.delegate=self;
     composeView.user = [User currentUser];
+    [self presentViewController:navigationController animated:YES completion:nil];
+}
+
+- (void)onReplyButton:(UIButton*)sender {
+    ComposeVC *composeView = [[ComposeVC alloc] init];
+    composeView.user = [User currentUser];
+    composeView.tweet = [self.tweets objectAtIndex:sender.tag];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:composeView];
     [self presentViewController:navigationController animated:YES completion:nil];
 }
 

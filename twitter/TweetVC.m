@@ -29,6 +29,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    NSMutableDictionary *titleBarAttributes = [NSMutableDictionary dictionaryWithDictionary: [[UINavigationBar appearance] titleTextAttributes]];
+    [titleBarAttributes setValue:[UIColor whiteColor] forKey:UITextAttributeTextColor];
+    [[UINavigationBar appearance] setTitleTextAttributes:titleBarAttributes];
+    
+    self.navigationItem.title = @"Tweet";
+    
     self.text.text = self.tweet.text;
     [self.text sizeToFit];
     self.name.text = self.tweet.name;

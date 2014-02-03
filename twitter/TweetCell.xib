@@ -111,6 +111,7 @@
             <connections>
                 <outlet property="displayImageUrl" destination="e1K-pP-2VR" id="cnH-aV-8La"/>
                 <outlet property="name" destination="IEz-lR-6cy" id="EgE-iQ-h2i"/>
+                <outlet property="replyButton" destination="Lvx-5O-naM" id="0hP-v6-aLK"/>
                 <outlet property="screenName" destination="jId-Ce-ZGH" id="NkE-Th-vod"/>
                 <outlet property="tweetText" destination="PEK-AH-iUq" id="Zg5-QN-BJz"/>
             </connections>

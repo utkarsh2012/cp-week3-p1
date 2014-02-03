@@ -28,6 +28,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    NSMutableDictionary *titleBarAttributes = [NSMutableDictionary dictionaryWithDictionary: [[UINavigationBar appearance] titleTextAttributes]];
+    [titleBarAttributes setValue:[UIColor whiteColor] forKey:UITextAttributeTextColor];
+    [[UINavigationBar appearance] setTitleTextAttributes:titleBarAttributes];
+    
+    self.navigationItem.title = @"";
+    
     self.name.text = [self.user objectForKey:@"name"];
     self.screenName.text = [self.user objectForKey:@"screen_name"];
     
