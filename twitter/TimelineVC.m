@@ -15,6 +15,7 @@
 @interface TimelineVC ()
 
 @property (nonatomic, strong) NSMutableArray *tweets;
+@property (strong, nonatomic) NSTimer *timer;
 
 - (void)onSignOutButton;
 - (void)reload:(NSInteger)sinceId;
@@ -132,14 +133,11 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView_
 {
     CGFloat actualPosition = scrollView_.contentOffset.y;
-    CGFloat contentHeight = 20 * 90;
-    if (actualPosition >= contentHeight) {
-        Tweet *lastTweet = [self.tweets lastObject];
-        NSInteger tweetId = [[lastTweet objectForKey:@"id"] integerValue];
-        [self reload:tweetId];
+    CGFloat contentHeight = self.tweets.count * 90;
+    if (actualPosition >= contentHeight && ![self.timer isValid]) {
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(reloadNextTweets:) userInfo:nil repeats:NO];
     }
 }
-
 
 /*
 // Override to support conditional editing of the table view.
@@ -268,6 +266,23 @@
     [[TwitterClient instance] homeTimelineWithCount:20 sinceId:sinceId maxId:0 success:^(AFHTTPRequestOperation *operation, id response) {
         NSLog(@"%@", response);
         if (sinceId>0) {
+            [self.tweets addObjectsFromArray:[Tweet tweetsWithArray:response]];
+        } else {
+            self.tweets = [Tweet tweetsWithArray:response];
+        }
+        [self.tableView reloadData];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        // Do nothing
+        NSLog(@"%@", error);
+    }];
+}
+
+- (void)reloadNextTweets:(NSTimer *)timer {
+    Tweet *lastTweet = [self.tweets lastObject];
+    NSInteger tweetId = [[lastTweet objectForKey:@"id"] integerValue];
+    [[TwitterClient instance] homeTimelineWithCount:20 sinceId:tweetId maxId:0 success:^(AFHTTPRequestOperation *operation, id response) {
+        NSLog(@"%@", response);
+        if (tweetId>0) {
             [self.tweets addObjectsFromArray:[Tweet tweetsWithArray:response]];
         } else {
             self.tweets = [Tweet tweetsWithArray:response];
