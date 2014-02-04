@@ -11,22 +11,45 @@
 @implementation Tweet
 
 - (NSString *)text {
+    if ([self.data valueOrNilForKeyPath:@"retweeted_status"]) {
+        return [[self.data valueOrNilForKeyPath:@"retweeted_status"] valueOrNilForKeyPath:@"text"];
+    }
     return [self.data valueOrNilForKeyPath:@"text"];
 }
 
 - (NSString *)profile_image_url {
+    if ([self.data valueOrNilForKeyPath:@"retweeted_status"]) {
+        NSDictionary *user = [[self.data valueOrNilForKeyPath:@"retweeted_status"] valueOrNilForKeyPath:@"user"];
+        return [user valueOrNilForKeyPath:@"profile_image_url"];
+    }
     NSDictionary *user = [self.data valueOrNilForKeyPath:@"user"];
     return [user valueOrNilForKeyPath:@"profile_image_url"];
 }
 
 - (NSString *)name {
+    if ([self.data valueOrNilForKeyPath:@"retweeted_status"]) {
+        NSDictionary *user = [[self.data valueOrNilForKeyPath:@"retweeted_status" ] valueOrNilForKeyPath:@"user"];
+        return [user valueOrNilForKeyPath:@"name"];
+    }
     NSDictionary *user = [self.data valueOrNilForKeyPath:@"user"];
     return [user valueOrNilForKeyPath:@"name"];
 }
 
 - (NSString *)screen_name {
+    if ([self.data valueOrNilForKeyPath:@"retweeted_status"]) {
+        NSDictionary *user = [[self.data valueOrNilForKeyPath:@"retweeted_status"] valueOrNilForKeyPath:@"user"];
+        return [user valueOrNilForKeyPath:@"screen_name"];
+    }
     NSDictionary *user = [self.data valueOrNilForKeyPath:@"user"];
     return [@"@" stringByAppendingString: [user valueOrNilForKeyPath:@"screen_name"] ];
+}
+
+- (NSString *)retweeted_by {
+    if ([self.data valueOrNilForKeyPath:@"retweeted_status"]) {
+        NSDictionary *user = [self.data valueOrNilForKeyPath:@"user"];
+        return [user valueOrNilForKeyPath:@"name"];
+    }
+    return nil;
 }
 
 - (NSString *)total_retweets {

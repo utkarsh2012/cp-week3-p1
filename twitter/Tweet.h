@@ -17,6 +17,7 @@
 @property (nonatomic, strong, readonly) NSString *profile_image_url;
 @property (nonatomic, strong, readonly) NSString *name;
 @property (nonatomic, strong, readonly) NSString *screen_name;
+@property (nonatomic, strong, readonly) NSString *retweeted_by;
 @property (nonatomic, strong, readonly) NSString *total_retweets;
 @property (nonatomic, strong, readonly) NSString *total_favorites;
 @property BOOL favorited;

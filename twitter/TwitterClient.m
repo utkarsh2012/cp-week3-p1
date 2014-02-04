@@ -54,8 +54,10 @@ static NSString * const kAccessTokenKey = @"kAccessTokenKey";
 
 #pragma mark - Statuses API
 
-- (void)homeTimelineWithCount:(int)count sinceId:(int)sinceId maxId:(int)maxId success:(void (^)(AFHTTPRequestOperation *operation, id response))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"count": @(count), @"include_my_retweet" : @"true"}];
+- (void)homeTimelineWithCount:(int)count sinceId:(int)sinceId maxId:(long long)maxId success:(void (^)(AFHTTPRequestOperation *operation, id response))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"count": @(count),
+                                                                                  @"include_my_retweet": @"true",
+                                                                                  @"include_rts": @"true"}];
     if (sinceId > 0) {
         [params setObject:@(sinceId) forKey:@"since_id"];
     }

@@ -122,6 +122,19 @@
         [cell.retweetButton setSelected:YES];
     }
     
+    UIView *retweetedByView = (UIView *)[self.view viewWithTag:42];
+    if(tweet.retweeted_by){
+        cell.retweetedBy.text = tweet.retweeted_by;
+        retweetedByView.hidden = NO;
+    } else {
+        CGRect newFrame = retweetedByView.frame;
+        newFrame.size.width = 0;
+        newFrame.size.height = 0;
+
+        [retweetedByView setFrame:newFrame];
+        retweetedByView.hidden = YES;
+    }
+    
     return cell;
 }
 
@@ -279,8 +292,8 @@
 
 - (void)reloadNextTweets:(NSTimer *)timer {
     Tweet *lastTweet = [self.tweets lastObject];
-    NSInteger tweetId = [[lastTweet objectForKey:@"id"] integerValue];
-    [[TwitterClient instance] homeTimelineWithCount:20 sinceId:tweetId maxId:0 success:^(AFHTTPRequestOperation *operation, id response) {
+    long long tweetId = [[lastTweet objectForKey:@"id"] longLongValue];
+    [[TwitterClient instance] homeTimelineWithCount:20 sinceId:0 maxId:tweetId success:^(AFHTTPRequestOperation *operation, id response) {
         NSLog(@"%@", response);
         if (tweetId>0) {
             [self.tweets addObjectsFromArray:[Tweet tweetsWithArray:response]];
